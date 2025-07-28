@@ -24,7 +24,6 @@ const ProtectedRoute = ({ children }) => {
   return children;
 };
 
-// Componente para rutas de autenticación (ocultar si ya está logueado)
 const AuthRoute = ({ children }) => {
   const { isAuthenticated, isLoading } = useAuth();
 
@@ -76,9 +75,6 @@ const HomePage = () => {
         {/* Características */}
         <div className="grid md:grid-cols-3 gap-8 mt-16">
           <div className="card p-6 text-center">
-            <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-2xl">🍽️</span>
-            </div>
             <h3 className="text-lg font-display font-semibold text-secondary-800 mb-2">
               Crear Restaurantes
             </h3>
@@ -88,9 +84,6 @@ const HomePage = () => {
           </div>
 
           <div className="card p-6 text-center">
-            <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-2xl">✏️</span>
-            </div>
             <h3 className="text-lg font-display font-semibold text-secondary-800 mb-2">
               Editar y Actualizar
             </h3>
@@ -100,9 +93,6 @@ const HomePage = () => {
           </div>
 
           <div className="card p-6 text-center">
-            <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-2xl">🗑️</span>
-            </div>
             <h3 className="text-lg font-display font-semibold text-secondary-800 mb-2">
               Eliminar
             </h3>
@@ -116,7 +106,6 @@ const HomePage = () => {
   );
 };
 
-// Layout principal sin Header
 const Layout = ({ children }) => {
   return (
     <div className="min-h-screen bg-gray-50">

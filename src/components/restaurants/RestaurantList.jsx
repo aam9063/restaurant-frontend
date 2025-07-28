@@ -20,11 +20,9 @@ const RestaurantList = () => {
   const itemsPerPage = 10;
 
   useEffect(() => {
-    // Verificar si se debe abrir el modal de creación
     if (searchParams.get('action') === 'create') {
       setShowModal(true);
       setEditingRestaurant(null);
-      // Limpiar el parámetro de la URL
       setSearchParams({});
     }
   }, [searchParams, setSearchParams]);
@@ -78,7 +76,7 @@ const RestaurantList = () => {
   };
 
   const handleDelete = async (id) => {
-    if (deletingId) return; // Prevenir doble click
+    if (deletingId) return;
     
     if (!window.confirm('¿Estás seguro de que quieres eliminar este restaurante?')) {
       return;

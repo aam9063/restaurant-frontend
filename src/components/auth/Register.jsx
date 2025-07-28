@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
-import { Mail, User, ArrowRight, UtensilsCrossed, AlertCircle, CheckCircle } from 'lucide-react';
+import { Mail, User, ArrowRight, UtensilsCrossed, AlertCircle, CheckCircle, ArrowLeft } from 'lucide-react';
 import LoadingSpinner from '../LoadingSpinner';
 
 const Register = () => {
@@ -80,12 +80,9 @@ const Register = () => {
         name: formData.name.trim(),
         roles: ['ROLE_USER']
       };
-      
-      console.log('Enviando datos de registro:', userData);
       await register(userData);
       navigate('/dashboard');
     } catch (error) {
-      // Los errores se manejan en el context
       console.error('Error en registro:', error);
     }
   };
@@ -95,6 +92,17 @@ const Register = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-50 to-secondary-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
+        {/* Botón de regresar al inicio */}
+        <div className="flex justify-start">
+          <Link
+            to="/"
+            className="inline-flex items-center space-x-2 text-secondary-600 hover:text-secondary-800 transition-colors duration-200 group"
+          >
+            <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform duration-200" />
+            <span className="text-sm font-medium">Volver al inicio</span>
+          </Link>
+        </div>
+
         {/* Header */}
         <div className="text-center">
           <div className="flex justify-center">

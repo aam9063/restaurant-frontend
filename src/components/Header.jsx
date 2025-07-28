@@ -97,7 +97,6 @@ const Header = () => {
                           {userEmail}
                         </p>
                       </div>
-
                       
                       <button 
                         onClick={handleLogout}

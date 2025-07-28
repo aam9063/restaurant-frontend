@@ -1,7 +1,6 @@
 import apiService from './api.js';
 
 class RestaurantService {
-  // Obtener todos los restaurantes con paginación optimizada
   async getRestaurants(page = 1, itemsPerPage = 10) {
     try {
       const params = {
@@ -9,14 +8,12 @@ class RestaurantService {
         itemsPerPage: Math.min(itemsPerPage, 100) // Máximo 100 por página
       };
       
-      // La URL ahora incluye los parámetros, así el caché funcionará correctamente
       return await apiService.get('/restaurants', params);
     } catch (error) {
       throw new Error(error.message || 'Error al obtener restaurantes');
     }
   }
 
-  // Obtener un restaurante por ID
   async getRestaurant(id) {
     try {
       return await apiService.get(`/restaurants/${id}`);
@@ -25,7 +22,6 @@ class RestaurantService {
     }
   }
 
-  // Crear un nuevo restaurante
   async createRestaurant(restaurantData) {
     try {
       const { name, address, phone } = restaurantData;
@@ -40,7 +36,6 @@ class RestaurantService {
         phone: phone?.trim() || ''
       });
       
-      // Limpiar caché después de crear
       apiService.clearCache('/restaurants');
       
       return result;
@@ -49,7 +44,6 @@ class RestaurantService {
     }
   }
 
-  // Actualizar un restaurante (PUT - actualización completa)
   async updateRestaurant(id, restaurantData) {
     try {
       const { name, address, phone } = restaurantData;
@@ -64,7 +58,6 @@ class RestaurantService {
         phone: phone?.trim() || ''
       });
       
-      // Limpiar caché después de actualizar
       apiService.clearCache('/restaurants');
       
       return result;
@@ -73,7 +66,6 @@ class RestaurantService {
     }
   }
 
-  // Actualizar parcialmente un restaurante (PATCH)
   async patchRestaurant(id, changes) {
     try {
       const cleanChanges = {};
@@ -90,7 +82,6 @@ class RestaurantService {
       
       const result = await apiService.patch(`/restaurants/${id}`, cleanChanges);
       
-      // Limpiar caché después de actualizar
       apiService.clearCache('/restaurants');
       
       return result;
@@ -99,12 +90,10 @@ class RestaurantService {
     }
   }
 
-  // Eliminar un restaurante
   async deleteRestaurant(id) {
     try {
       const result = await apiService.delete(`/restaurants/${id}`);
       
-      // Limpiar caché después de eliminar
       apiService.clearCache('/restaurants');
       
       return result;
@@ -113,17 +102,14 @@ class RestaurantService {
     }
   }
 
-  // Búsqueda avanzada de restaurantes
   async searchRestaurants(searchParams = {}) {
     try {
       const params = {};
       
-      // Búsqueda general
       if (searchParams.search) {
         params.search = searchParams.search.trim();
       }
       
-      // Filtros específicos
       if (searchParams.name) {
         params.name = searchParams.name.trim();
       }
@@ -134,7 +120,6 @@ class RestaurantService {
         params.phone = searchParams.phone.trim();
       }
       
-      // Filtros de fecha
       if (searchParams.created_from) {
         params.created_from = searchParams.created_from;
       }
@@ -148,7 +133,6 @@ class RestaurantService {
         params.updated_to = searchParams.updated_to;
       }
       
-      // Ordenamiento
       if (searchParams.order_by) {
         params.order_by = searchParams.order_by;
       }
@@ -156,7 +140,6 @@ class RestaurantService {
         params.order_direction = searchParams.order_direction;
       }
       
-      // Paginación
       if (searchParams.page) {
         params.page = searchParams.page;
       }
@@ -170,7 +153,6 @@ class RestaurantService {
     }
   }
 
-  // Búsqueda rápida para autocompletado
   async quickSearch(query, limit = 10) {
     try {
       if (!query || query.trim().length < 2) {
@@ -188,7 +170,6 @@ class RestaurantService {
     }
   }
 
-  // Encontrar restaurantes similares
   async getSimilarRestaurants(id, limit = 5) {
     try {
       const params = {
@@ -201,7 +182,6 @@ class RestaurantService {
     }
   }
 
-  // Utilidades para formatear datos
   formatRestaurant(restaurant) {
     if (!restaurant) return null;
     
@@ -215,11 +195,9 @@ class RestaurantService {
     };
   }
 
-  // Formatear respuesta de lista con paginación mejorada
   formatRestaurantList(response) {
     if (!response) return { restaurants: [], total: 0, pagination: null };
     
-    // Formato API Platform (hydra) - El más confiable
     if (response['hydra:member']) {
       return {
         restaurants: response['hydra:member'].map(r => this.formatRestaurant(r)),
@@ -232,7 +210,6 @@ class RestaurantService {
       };
     }
     
-    // Formato búsqueda personalizada  
     if (response.results) {
       return {
         restaurants: response.results.map(r => this.formatRestaurant(r)),
@@ -241,7 +218,6 @@ class RestaurantService {
       };
     }
     
-    // Caso especial: Si viene con total separado (formato personalizado)
     if (response.data && response.total !== undefined) {
       return {
         restaurants: response.data.map(r => this.formatRestaurant(r)),
@@ -250,7 +226,6 @@ class RestaurantService {
       };
     }
     
-    // Si viene como array directo pero con totalItems separado
     if (Array.isArray(response) && response.totalItems !== undefined) {
       return {
         restaurants: response.map(r => this.formatRestaurant(r)),
@@ -259,22 +234,19 @@ class RestaurantService {
       };
     }
     
-    // Formato directo (API devuelve array sin metadatos) - MEJORADO
     if (Array.isArray(response)) {
       const pageSize = 10; // itemsPerPage por defecto
       const currentPageItems = response.length;
       
-      // Lógica mejorada: Si hay exactamente pageSize elementos, 
-      // es probable que haya más páginas, pero solo lo confirmamos si hay datos
       const hasMorePages = currentPageItems === pageSize && currentPageItems > 0;
       
       return {
         restaurants: response.map(r => this.formatRestaurant(r)),
-        total: currentPageItems, // Se actualizará con lógica inteligente en Dashboard
+        total: currentPageItems,
         pagination: {
           hasMore: hasMorePages,
           itemsInCurrentPage: currentPageItems,
-          isDirectArray: true // Flag para identificar este formato
+          isDirectArray: true 
         }
       };
     }
@@ -286,7 +258,6 @@ class RestaurantService {
     };
   }
 
-  // Extraer número de página de URL hydra
   extractPageFromUrl(url) {
     try {
       const urlObj = new URL(url);
@@ -296,7 +267,6 @@ class RestaurantService {
     }
   }
 
-  // Limpiar caché manualmente (útil para refresh manual)
   clearCache() {
     apiService.clearCache('/restaurants');
   }

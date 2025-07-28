@@ -14,7 +14,6 @@ const RestaurantModal = ({ isOpen, onClose, onSuccess, restaurant = null }) => {
 
   const isEditing = !!restaurant;
 
-  // Cargar datos del restaurante cuando se abre el modal para editar
   useEffect(() => {
     if (isOpen) {
       if (restaurant) {
@@ -74,7 +73,6 @@ const RestaurantModal = ({ isOpen, onClose, onSuccess, restaurant = null }) => {
 
       case 'phone':
         if (value.trim()) {
-          // Validar formato de teléfono (opcional)
           const phoneRegex = /^[\d\s\-()]+$/;
           if (!phoneRegex.test(value.trim())) {
             newErrors.phone = 'Formato de teléfono inválido';

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
-import { Mail, ArrowRight, UtensilsCrossed, AlertCircle } from 'lucide-react';
+import { Mail, ArrowRight, UtensilsCrossed, AlertCircle, ArrowLeft } from 'lucide-react';
 import LoadingSpinner from '../LoadingSpinner';
 
 const Login = () => {
@@ -11,7 +11,6 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Redireccionar después del login
   const from = location.state?.from?.pathname || '/dashboard';
 
   const handleSubmit = async (e) => {
@@ -40,10 +39,20 @@ const Login = () => {
     }
   };
 
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-50 to-secondary-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
+        {/* Botón de regresar al inicio */}
+        <div className="flex justify-start">
+          <Link
+            to="/"
+            className="inline-flex items-center space-x-2 text-secondary-600 hover:text-secondary-800 transition-colors duration-200 group"
+          >
+            <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform duration-200" />
+            <span className="text-sm font-medium">Volver al inicio</span>
+          </Link>
+        </div>
+
         {/* Header */}
         <div className="text-center">
           <div className="flex justify-center">
@@ -106,8 +115,6 @@ const Login = () => {
                 </>
               )}
             </button>
-
-          
           </form>
 
           {/* Enlaces */}

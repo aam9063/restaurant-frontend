@@ -17,15 +17,9 @@ const Dashboard = () => {
   // Función para cargar restaurantes
   const loadRestaurants = async () => {
     try {
-      setIsLoading(true);
-      console.log('Dashboard: Iniciando carga de restaurantes...');
-      
-      const response = await restaurantService.getRestaurants(1, 20);
-      console.log('Dashboard: Respuesta recibida:', response);
-      
-      const { restaurants: restaurantsList } = restaurantService.formatRestaurantList(response);
-      console.log('Dashboard: Restaurantes formateados:', restaurantsList);
-      
+      setIsLoading(true);      
+      const response = await restaurantService.getRestaurants(1, 20);      
+      const { restaurants: restaurantsList } = restaurantService.formatRestaurantList(response);      
       setRestaurants(restaurantsList);
       toast.success(`${restaurantsList.length} restaurantes cargados`);
     } catch (error) {
@@ -49,36 +43,19 @@ const Dashboard = () => {
 
   // Cargar restaurantes solo cuando estemos completamente autenticados
   useEffect(() => {
-    console.log('Dashboard: useEffect ejecutado', {
-      authLoading,
-      isAuthenticated,
-      isApiKeyConfigured: isApiKeyConfigured()
-    });
-    
-    // Solo cargar si no estamos en proceso de autenticación, estamos autenticados y tenemos API key
     if (!authLoading && isAuthenticated && isApiKeyConfigured()) {
-      console.log('Dashboard: Condiciones cumplidas, cargando restaurantes...');
       loadRestaurants();
-    } else {
-      console.log('Dashboard: Esperando autenticación completa...', {
-        authLoading,
-        isAuthenticated,
-        hasApiKey: isApiKeyConfigured()
-      });
     }
   }, [authLoading, isAuthenticated]);
 
-  // Si aún está cargando la autenticación, mostrar loading
   if (authLoading) {
     return <LoadingCard message="Verificando autenticación..." />;
   }
 
-  // Si no está autenticado o no hay API key, no mostrar nada (el ProtectedRoute debería redirigir)
   if (!isAuthenticated || !isApiKeyConfigured()) {
     return <LoadingCard message="Configurando autenticación..." />;
   }
 
-  // Si está cargando los restaurantes, mostrar loading
   if (isLoading) {
     return (
       <div className="container mx-auto px-4 py-8">
@@ -155,10 +132,10 @@ const Dashboard = () => {
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-gray-900">
-                  ¡Bienvenido, {userName}! 👋
+                  ¡Bienvenido, {userName}!
                 </h1>
                 <p className="text-gray-600 flex items-center space-x-2">
-                  <span>📧 {userEmail}</span>
+                  <span>{userEmail}</span>
                   <span className="text-green-600">● Conectado</span>
                 </p>
               </div>
